@@ -84,7 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Updated to support random colors & dynamic quantity for V 1.8
   function createSparkleBurst(originX, originY, color, count = 16, randomColor = false) {
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
@@ -162,18 +161,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function fetchWeather() {
     try {
-      // V1.8 Added is_day parameter to accurately track sunset/sunrise
       const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=50.83&longitude=4.39&current=temperature_2m,apparent_temperature,weather_code,is_day&timezone=Europe%2FBrussels');
       const data = await response.json();
       
       const temp = Math.round(data.current.temperature_2m);
       const feelsLike = Math.round(data.current.apparent_temperature);
       const code = data.current.weather_code;
-      const isDay = data.current.is_day; // 1 for Day, 0 for Night
+      const isDay = data.current.is_day; 
       
       let condition = ""; let recommendation = ""; let icon = "";
 
-      // V1.8 Day vs Night logic
       if (code === 0) { 
         if (isDay) {
           condition = "Sunny"; icon = "☀️"; recommendation = "Apply sunscreen and stay hydrated Madame!"; 
@@ -189,9 +186,9 @@ document.addEventListener('DOMContentLoaded', () => {
       else { condition = "Unknown"; icon = "🌡️"; recommendation = "Weather pinik e ase.. Chill mere ghumao!"; }
 
       const weatherBubble = document.getElementById('weather-bubble');
-      const weatherFloat = document.getElementById('weather-float');
       const weatherBlob = document.getElementById('weather-blob');
       const weatherContent = document.getElementById('weather-content');
+      const angryBubble = document.getElementById('angry-bubble');
       
       weatherContent.innerHTML = `
         <div class="weather-header">${icon} ${temp}°C <br><span>in Brussels</span></div>
@@ -203,21 +200,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let currentShapeIdx = 0;
       
-      // Multi-click logic and morphing
       weatherBlob.addEventListener('click', (e) => {
-        // Morph shape
         currentShapeIdx = (currentShapeIdx + Math.floor(Math.random() * 19) + 1) % organicShapesPool.length;
         weatherBlob.style.borderRadius = organicShapesPool[currentShapeIdx];
 
-        // 3X Particle Burst with Randomized colors (V 1.8)
         const rect = weatherBlob.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
         createSparkleBurst(centerX, centerY, null, 48, true);
 
-        // Angry Bubble 3-Click Logic (V 1.8)
         const now = Date.now();
-        // If clicks are more than 800ms apart, reset the counter
         if (now - weatherLastClickTime > 800) {
           weatherClickCount = 0;
         }
@@ -226,24 +218,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (weatherClickCount >= 3 && !angryBubbleActive) {
           angryBubbleActive = true;
-          weatherClickCount = 0; // Reset
+          weatherClickCount = 0; 
 
-          const angryBubble = document.createElement('div');
-          angryBubble.className = 'angry-bubble pop-in';
+          // Set random sassy text
           angryBubble.innerText = sassyPhrases[Math.floor(Math.random() * sassyPhrases.length)];
           
-          // Append to float so it bobs up and down with the weather
-          weatherFloat.appendChild(angryBubble);
+          // Give the angry bubble its own random organic shape matching the style
+          const randomAngryShape = organicShapesPool[Math.floor(Math.random() * organicShapesPool.length)];
+          angryBubble.style.borderRadius = randomAngryShape;
+
+          // Check if positioning it to the right would overflow the screen width
+          const weatherRect = weatherBubble.getBoundingClientRect();
+          const estimatedBubbleWidth = 260; // Max CSS width
+          if (weatherRect.right + (window.innerWidth * 0.03) + estimatedBubbleWidth > window.innerWidth) {
+            // Shift it to the left side of the weather bubble if it hits the right edge
+            angryBubble.style.left = 'auto';
+            angryBubble.style.right = 'calc(100% + 3vw)';
+          } else {
+            angryBubble.style.right = 'auto';
+            angryBubble.style.left = 'calc(100% + 3vw)';
+          }
+
+          // Show bubble
+          angryBubble.classList.add('show');
 
           // Disappear after 5 seconds
           setTimeout(() => {
-            angryBubble.style.opacity = '0';
-            angryBubble.style.transform = 'scale(0)';
+            angryBubble.classList.remove('show');
             
-            // Wait for fade-out animation to finish before removing from DOM
             setTimeout(() => {
-              angryBubble.remove();
-              angryBubbleActive = false; // Reset function
+              angryBubbleActive = false; 
             }, 500); 
           }, 5000);
         }
@@ -304,7 +308,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const petalsWrapper = document.createElement('div');
     petalsWrapper.classList.add('petals-wrapper');
 
-    // Attach Click Event for Recoil + Sparkle Physics + Floating Heart
     petalsWrapper.addEventListener('click', (e) => {
       e.stopPropagation();
       
@@ -312,7 +315,6 @@ document.addEventListener('DOMContentLoaded', () => {
       void swayWrapper.offsetWidth; 
       swayWrapper.classList.add('boing');
 
-      // 1X Particle Burst, Matched color
       const rect = petalsWrapper.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
