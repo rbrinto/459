@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const grassContainer = document.getElementById('grass-container');
   
   let flowerCount = 0;
-  const MAX_FLOWERS = 50;
+  // Tweaked: Increased total limit
+  const MAX_FLOWERS = 200; 
   
   // Neon Color Palettes
   const colorPalettes = [
@@ -28,22 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 1. Plant the gentle grass background
   function plantGrass() {
-    const numGrass = 45; // Just enough for a gentle covering, not a dense bush
+    const numGrass = 45; 
     for (let i = 0; i < numGrass; i++) {
       const blade = document.createElement('div');
       blade.classList.add('grass-blade');
       
-      // Randomize position across the width
       blade.style.left = (Math.random() * 100) + '%';
-      
-      // Randomize height (40px to 90px)
       blade.style.setProperty('--grass-height', (Math.random() * 50 + 40) + 'px');
-      
-      // Randomize sway speed and delay
       blade.style.setProperty('--sway-time', (Math.random() * 2 + 2) + 's');
       blade.style.animationDelay = (Math.random() * -5) + 's';
       
-      // Randomly curve grass left or right
       if (Math.random() > 0.5) {
         blade.style.borderTopLeftRadius = '10%';
         blade.style.borderTopRightRadius = '100%';
@@ -58,12 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const flower = document.createElement('div');
     flower.classList.add('flower');
     flower.style.left = x + 'px';
-    
-    // Anchor to the ground (with a tiny random depth offset)
     flower.style.bottom = yOffset + 'px';
-    
-    // Flowers slightly lower on the screen render in front
     flower.style.zIndex = 100 - Math.floor(yOffset); 
+
+    // Tweaked: Randomize Scale (between 0.45x and 1.1x) to ensure smaller mix
+    const randomScale = (Math.random() * 0.65) + 0.45;
+    flower.style.transform = `translateX(-50%) scale(${randomScale})`;
 
     const config = shapeConfigs[Math.floor(Math.random() * shapeConfigs.length)];
     const colors = colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
@@ -72,7 +67,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const swayWrapper = document.createElement('div');
     swayWrapper.classList.add('sway');
-    swayWrapper.style.animationDuration = (Math.random() * 2 + 3) + 's';
+    
+    // Tweaked: Assign a random resting tilt (-12 to +12 degrees) for organic bending
+    const baseTilt = (Math.random() * 24) - 12;
+    swayWrapper.style.setProperty('--base-rot', `${baseTilt}deg`);
+    swayWrapper.style.setProperty('--sway-duration', (Math.random() * 2 + 3) + 's');
     swayWrapper.style.animationDelay = (Math.random() * -2) + 's';
 
     const petalsWrapper = document.createElement('div');
@@ -106,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const stem = document.createElement('div');
     stem.classList.add('stem');
     
-    // Stem heights vary from 100px up to 300px
     const stemHeight = Math.floor(Math.random() * 200) + 100;
     stem.style.setProperty('--stem-height', stemHeight + 'px');
 
@@ -120,17 +118,20 @@ document.addEventListener('DOMContentLoaded', () => {
   function autoPlant() {
     if (flowerCount >= MAX_FLOWERS) return;
 
-    // Pick random horizontal position, avoiding the extreme edges
-    const randomX = Math.random() * (window.innerWidth - 80) + 40;
-    
-    // Depth offset: between 0px and 30px from the absolute bottom of the screen
-    const groundYOffset = Math.random() * 30; 
-    
-    createFlower(randomX, groundYOffset);
-    flowerCount++;
+    // Tweaked: Generate 2 to 4 flowers per interval instead of just 1
+    const spawnCount = Math.floor(Math.random() * 3) + 2; 
+
+    for (let i = 0; i < spawnCount; i++) {
+        if (flowerCount >= MAX_FLOWERS) break; // Final check so it doesn't overshoot 200
+
+        const randomX = Math.random() * (window.innerWidth - 80) + 40;
+        const groundYOffset = Math.random() * 30; 
+        
+        createFlower(randomX, groundYOffset);
+        flowerCount++;
+    }
 
     if (flowerCount < MAX_FLOWERS) {
-      // Exactly 1 second (1000 milliseconds)
       setTimeout(autoPlant, 1000);
     }
   }
