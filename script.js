@@ -32,12 +32,59 @@ document.addEventListener('DOMContentLoaded', () => {
     '52% 48% 45% 55% / 48% 52% 55% 45%', '60% 40% 55% 45% / 45% 55% 45% 55%'
   ];
 
-  const sassyPhrases = [
+  // Comprehensive Sassy Phrases Pool
+  const baseSassyPhrases = [
     "Stop Hitting Me 😠", "Seriously?! 😒😒😒", "Youuu Need to Stoooop punching me 😤😤",
     "I can punch back 👊🏻👊🏻👊🏻", "Please let me sleep in peace 🥹🥹", "Shushshsshh 🤫🫩",
     "Lol that's the best you got? 😂😂", "Someone is being naughty 🙄🙄",
-    "My granny can hit better 😆", "Seriously, take a chill pill sis!"
+    "My granny can hit better 😆", "Seriously, take a chill pill sis!",
+    "Stop hitting me, weakling! 🙄", "That tickled more than hurt. 🥱",
+    "Is that your maximum power? 🤭", "Ouch! My delicate fragile soul. 💅",
+    "Violence is never the answer. 🤨", "You punch like a toddler. 👶",
+    "Stop abusing my poor arms! 😩", "Call an ambulance, I'm dying. 💀",
+    "Wow, such a fierce warrior. 😂", "My shield is up, try again. 🛡️",
+    "Let me sleep in peace! 🛌", "Shush, I am trying to sleep. 🤫",
+    "Why are you awake right now? 👀", "Do not disturb this beauty 👑",
+    "Stop kicking me 🛌", "Let me sleep in peace!!!! 😴",
+    "SHUUUSSHHHHHHHHHHHH. 🤫", "Pillow thief alert! Hands up! 🚨",
+    "Keep your scalpel away from me! 🔪", "My kidneys are not for sale. 🛑",
+    "Black market business is booming today. 💼", "Hands off my vital organs, please! 🚫",
+    "Can't touch my kidneys please.. Cause I need to buy an iPhone 💰",
+    "Call the chill Police! 🚨", "Print more Euros in Belgium fast! 💶",
+    "Go fund my luxury dinner tonight. 🍽️", "Belgium mint working overtime for us. 🏦",
+    "Time to print some more cash. 🖨️", "Fund my expensive restaurant habits today! 💸",
+    "Your ATM card is calling me. 💳", "Send money straight from Brussels now. 🇧🇪",
+    "Pay up for my fancy dinner. 🥂", "You are looking extra chaotic today. 🌪️",
+    "Somebody woke up and chose violence. 🥷", "Absolutely zero chill detected here. 🧊",
+    "You talk way too much science fiction. 🗣️", "Simmer down, little miss dramatic. 🎭",
+    "Who gave you permission to punch me?", "Cute outfit, terrible attitude today. 👗",
+    "You love drama way too much. 🍿", "Main character syndrome is acting up. 🎬",
+    "Oh wow, aren't we so edgy. 🙄", "Your sass level is breaking records. 📈",
+    "Blah blah blah, keep talking. 🥱", "Wow, someone needs a timeout. ⏱️",
+    "La Haula wala Kuwata illah Billah. 👞"
   ];
+
+  let sassyQueue = [];
+  let lastSassyText = null;
+
+  function getUniqueSassyPhrase() {
+    if (sassyQueue.length === 0) {
+      let queue = [...baseSassyPhrases];
+      // Fisher-Yates Shuffle
+      for (let i = queue.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [queue[i], queue[j]] = [queue[j], queue[i]];
+      }
+      // Prevent back-to-back repetition across queue boundaries
+      if (lastSassyText && queue[0] === lastSassyText && queue.length > 1) {
+        [queue[0], queue[1]] = [queue[1], queue[0]];
+      }
+      sassyQueue = queue;
+    }
+    const text = sassyQueue.pop();
+    lastSassyText = text;
+    return text;
+  }
 
   // =========================================
   // 1. 12-PHASE BRUSSELS TIME-SYNCED SKY
@@ -220,18 +267,15 @@ document.addEventListener('DOMContentLoaded', () => {
           angryBubbleActive = true;
           weatherClickCount = 0; 
 
-          // Set random sassy text
-          angryBubble.innerText = sassyPhrases[Math.floor(Math.random() * sassyPhrases.length)];
+          // Fetch unique random sassy text from queue
+          angryBubble.innerText = getUniqueSassyPhrase();
           
-          // Give the angry bubble its own random organic shape matching the style
           const randomAngryShape = organicShapesPool[Math.floor(Math.random() * organicShapesPool.length)];
           angryBubble.style.borderRadius = randomAngryShape;
 
-          // Check if positioning it to the right would overflow the screen width
           const weatherRect = weatherBubble.getBoundingClientRect();
-          const estimatedBubbleWidth = 260; // Max CSS width
+          const estimatedBubbleWidth = 260; 
           if (weatherRect.right + (window.innerWidth * 0.03) + estimatedBubbleWidth > window.innerWidth) {
-            // Shift it to the left side of the weather bubble if it hits the right edge
             angryBubble.style.left = 'auto';
             angryBubble.style.right = 'calc(100% + 3vw)';
           } else {
@@ -239,13 +283,10 @@ document.addEventListener('DOMContentLoaded', () => {
             angryBubble.style.left = 'calc(100% + 3vw)';
           }
 
-          // Show bubble
           angryBubble.classList.add('show');
 
-          // Disappear after 5 seconds
           setTimeout(() => {
             angryBubble.classList.remove('show');
-            
             setTimeout(() => {
               angryBubbleActive = false; 
             }, 500); 
