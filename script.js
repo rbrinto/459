@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isDay) {
           condition = "Sunny"; icon = "☀️"; recommendation = "Apply sunscreen and stay hydrated Madame!"; 
         } else {
-          condition = "Clear Sky"; icon = "🌙"; recommendation = "The moon looks beautiful tonight!";
+          condition = "Clear Sky"; icon = "🌙"; recommendation = "Can you see alien space ships?";
         }
       } 
       else if (code >= 1 && code <= 3) { condition = "Partly Cloudy"; icon = isDay ? "⛅" : "☁️"; recommendation = "Great weather for Organ Trafficking!"; } 
