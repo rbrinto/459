@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   const garden = document.getElementById('garden');
   const grassContainer = document.getElementById('grass-container');
+  const canvas = document.getElementById('ambient-particles');
+  const ctx = canvas.getContext('2d');
   
   let flowerCount = 0;
   const MAX_FLOWERS = 100; 
@@ -17,31 +19,136 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'dahlia', petals: 16, spread: 360 }
   ];
 
-  // Pool of 20 soft, organic rounded shapes for the weather cloud on click
   const organicShapesPool = [
-    '58% 42% 55% 45% / 52% 55% 45% 48%',
-    '48% 52% 42% 58% / 58% 42% 58% 42%',
-    '62% 38% 50% 50% / 42% 58% 42% 58%',
-    '55% 45% 60% 40% / 48% 52% 40% 60%',
-    '42% 58% 45% 55% / 58% 42% 55% 45%',
-    '60% 40% 52% 48% / 45% 55% 48% 52%',
-     me = '48% 52% 40% 60% / 60% 40% 52% 48%',
-    '58% 42% 62% 38% / 42% 58% 38% 62%',
-    '40% 60% 55% 45% / 58% 42% 45% 55%',
-    '62% 38% 42% 58% / 40% 60% 58% 42%',
-    '52% 48% 60% 40% / 55% 45% 40% 60%',
-    '45% 55% 48% 52% / 62% 38% 52% 48%',
-    '58% 42% 40% 60% / 42% 58% 60% 40%',
-     me = '42% 58% 58% 42% / 52% 48% 42% 58%',
-    '60% 40% 50% 50% / 40% 60% 50% 50%',
-    '45% 55% 62% 38% / 58% 42% 38% 62%',
-    '58% 42% 42% 58% / 45% 55% 58% 42%',
-    '42% 58% 60% 40% / 60% 40% 40% 60%',
-    '52% 48% 45% 55% / 48% 52% 55% 45%',
-    '60% 40% 55% 45% / 45% 55% 45% 55%'
+    '58% 42% 55% 45% / 52% 55% 45% 48%', '48% 52% 42% 58% / 58% 42% 58% 42%',
+    '62% 38% 50% 50% / 42% 58% 42% 58%', '55% 45% 60% 40% / 48% 52% 40% 60%',
+    '42% 58% 45% 55% / 58% 42% 55% 45%', '60% 40% 52% 48% / 45% 55% 48% 52%',
+    '48% 52% 40% 60% / 60% 40% 52% 48%', '58% 42% 62% 38% / 42% 58% 38% 62%',
+    '40% 60% 55% 45% / 58% 42% 45% 55%', '62% 38% 42% 58% / 40% 60% 58% 42%',
+    '52% 48% 60% 40% / 55% 45% 40% 60%', '45% 55% 48% 52% / 62% 38% 52% 48%',
+    '58% 42% 40% 60% / 42% 58% 60% 40%', '42% 58% 58% 42% / 52% 48% 42% 58%',
+    '60% 40% 50% 50% / 40% 60% 50% 50%', '45% 55% 62% 38% / 58% 42% 38% 62%',
+    '58% 42% 42% 58% / 45% 55% 58% 42%', '42% 58% 60% 40% / 60% 40% 40% 60%',
+    '52% 48% 45% 55% / 48% 52% 55% 45%', '60% 40% 55% 45% / 45% 55% 45% 55%'
   ];
 
-  // 1. Fetch Weather & Handle Interactions
+  // =========================================
+  // 1. 12-PHASE BRUSSELS TIME-SYNCED SKY
+  // =========================================
+  function updateBrusselsTheme() {
+    try {
+      const now = new Date();
+      // Calculate current hour in Brussels (Europe/Brussels)
+      const brusselsHourStr = now.toLocaleString("en-US", { timeZone: "Europe/Brussels", hour: 'numeric', hour12: false });
+      let hour = parseInt(brusselsHourStr, 10);
+      
+      if (hour >= 24) hour = 0; // Standardize midnight format
+
+      // Strip previous theme classes
+      document.body.className = document.body.className.replace(/\btheme-\d+-\d+\b/g, '').trim();
+
+      // Calculate the 2-hour window block (e.g. 15 becomes 14, making it theme-14-16)
+      const startHour = Math.floor(hour / 2) * 2;
+      const endHour = startHour + 2;
+      
+      document.body.classList.add(`theme-${startHour}-${endHour}`);
+    } catch (e) {
+      document.body.classList.add('theme-12-14'); // Safe daytime fallback
+    }
+  }
+  updateBrusselsTheme();
+  setInterval(updateBrusselsTheme, 60000); // Re-check time every 60s
+
+  // =========================================
+  // 2. CANVAS AMBIENT PARTICLES & SPARKLE PHYSICS
+  // =========================================
+  let particles = [];
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  // Create persistent ambient particles (Pollen / Fireflies)
+  for (let i = 0; i < 40; i++) {
+    particles.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      radius: Math.random() * 2.5 + 1,
+      color: 'rgba(255, 255, 255, ' + (Math.random() * 0.5 + 0.3) + ')',
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      isBurst: false
+    });
+  }
+
+  function createSparkleBurst(originX, originY, color) {
+    for (let i = 0; i < 16; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      // Increased distance range (2x) by raising the particle speeds
+      const speed = Math.random() * 8 + 3.0; 
+      particles.push({
+        x: originX,
+        y: originY,
+        radius: Math.random() * 3 + 1.5,
+        color: color,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 2, // Stronger upward pop vector
+        life: 1.0,
+        decay: Math.random() * 0.02 + 0.015,
+        isBurst: true
+      });
+    }
+  }
+
+  function renderParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+
+      if (p.isBurst) {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.05; // Gravity
+        p.life -= p.decay;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = Math.max(0, p.life);
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = p.color;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        if (p.life <= 0) particles.splice(i, 1);
+      } else {
+        // Floating ambient particles
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0) p.x = window.innerWidth;
+        if (p.x > window.innerWidth) p.x = 0;
+        if (p.y < 0) p.y = window.innerHeight;
+        if (p.y > window.innerHeight) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = 0.6;
+        ctx.fill();
+      }
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(renderParticles);
+  }
+  renderParticles();
+
+  // =========================================
+  // 3. FETCH WEATHER
+  // =========================================
   async function fetchWeather() {
     try {
       const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=50.83&longitude=4.39&current=temperature_2m,apparent_temperature,weather_code&timezone=Europe%2FBrussels');
@@ -73,7 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
       
       weatherBubble.classList.add('pop-in');
 
-      // Randomize Weather Cloud Shape on Click using soft rounded pool
       let currentShapeIdx = 0;
       weatherBlob.addEventListener('click', () => {
         currentShapeIdx = (currentShapeIdx + Math.floor(Math.random() * 19) + 1) % organicShapesPool.length;
@@ -86,7 +192,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 2. Plant Grass
+  // =========================================
+  // 4. PLANT GRASS
+  // =========================================
   function plantGrass() {
     const numGrass = 45; 
     for (let i = 0; i < numGrass; i++) {
@@ -104,7 +212,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 3. Create Flowers
+  // =========================================
+  // 5. CREATE INTERACTIVE FLOWERS
+  // =========================================
   function createFlower(x, yOffset) {
     const flower = document.createElement('div');
     flower.classList.add('flower');
@@ -130,6 +240,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const petalsWrapper = document.createElement('div');
     petalsWrapper.classList.add('petals-wrapper');
+
+    // Attach Click Event for Recoil + Sparkle Physics + Floating Heart
+    petalsWrapper.addEventListener('click', (e) => {
+      e.stopPropagation();
+      
+      // Trigger Spring Recoil
+      swayWrapper.classList.remove('boing');
+      void swayWrapper.offsetWidth; // Force Reflow
+      swayWrapper.classList.add('boing');
+
+      // Sparkle Particle Burst
+      const rect = petalsWrapper.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      createSparkleBurst(centerX, centerY, colors[0]);
+
+      // Floating Color-Matched Heart
+      const popText = document.createElement('div');
+      popText.classList.add('flower-pop-text');
+      
+      // Using the unicode text heart so we can natively colorize it using CSS
+      popText.innerText = '♥'; 
+      popText.style.color = colors[0];
+      popText.style.textShadow = `0 0 15px ${colors[0]}, 0 0 5px #fff`; 
+      
+      popText.style.left = centerX + 'px';
+      popText.style.top = centerY + 'px';
+      
+      document.body.appendChild(popText);
+
+      // Heart takes 4 seconds to reach the top of the screen before being removed
+      setTimeout(() => popText.remove(), 4000); 
+    });
 
     const spread = config.spread || 360;
     const offset = config.offset || 0;
@@ -167,7 +310,9 @@ document.addEventListener('DOMContentLoaded', () => {
     garden.appendChild(flower);
   }
 
-  // 4. Automated Planting
+  // =========================================
+  // 6. AUTOMATED PLANTING
+  // =========================================
   function autoPlant() {
     if (flowerCount >= MAX_FLOWERS) return;
 
