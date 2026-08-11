@@ -29,13 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
       
       let condition = ""; let recommendation = ""; let icon = "";
 
-      if (code === 0) { condition = "Sunny"; icon = "☀️"; recommendation = "Apply sunscreen and stay hydrated!"; } 
-      else if (code >= 1 && code <= 3) { condition = "Partly Cloudy"; icon = "⛅"; recommendation = "Great weather for a pleasant walk."; } 
-      else if (code === 45 || code === 48) { condition = "Foggy"; icon = "🌫️"; recommendation = "Low visibility, take care if driving."; } 
-      else if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) { condition = "Raining"; icon = "🌧️"; recommendation = "Don't forget to take your umbrella!"; } 
-      else if ((code >= 71 && code <= 77) || code === 85 || code === 86) { condition = "Snowing"; icon = "❄️"; recommendation = "Bundle up in a warm coat and boots!"; } 
-      else if (code >= 95 && code <= 99) { condition = "Thunderstorm"; icon = "⛈️"; recommendation = "Stay indoors and keep safe!"; } 
-      else { condition = "Unknown"; icon = "🌡️"; recommendation = "Dress comfortably!"; }
+      if (code === 0) { condition = "Sunny"; icon = "☀️"; recommendation = "Apply sunscreen and stay hydrated Madame!"; } 
+      else if (code >= 1 && code <= 3) { condition = "Partly Cloudy"; icon = "⛅"; recommendation = "Great weather for Organ Trafficking!"; } 
+      else if (code === 45 || code === 48) { condition = "Foggy"; icon = "🌫️"; recommendation = "I dunno what to do in Foggy weather Lol"; } 
+      else if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) { condition = "Raining"; icon = "🌧️"; recommendation = "Don't forget your umbrella Madame Ji!"; } 
+      else if ((code >= 71 && code <= 77) || code === 85 || code === 86) { condition = "Snowing"; icon = "❄️"; recommendation = "Drink a cup of Belgian Hot Chocolate!"; } 
+      else if (code >= 95 && code <= 99) { condition = "Thunderstorm"; icon = "⛈️"; recommendation = "Go outside and catch thunder, I dare you!"; } 
+      else { condition = "Unknown"; icon = "🌡️"; recommendation = "Weather pinik e ase.. Chill mere ghumao!"; }
 
       const weatherBubble = document.getElementById('weather-bubble');
       const weatherBlob = document.getElementById('weather-blob');
