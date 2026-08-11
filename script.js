@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const grassContainer = document.getElementById('grass-container');
   
   let flowerCount = 0;
-  const MAX_FLOWERS = 100;
+  const MAX_FLOWERS = 100; 
   
   const colorPalettes = [
     ['#ff0080', '#ff8c00'], ['#00f2fe', '#4facfe'], ['#f83600', '#f9d423'], 
