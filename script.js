@@ -17,6 +17,30 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'dahlia', petals: 16, spread: 360 }
   ];
 
+  // Pool of 20 soft, organic rounded shapes for the weather cloud on click
+  const organicShapesPool = [
+    '58% 42% 55% 45% / 52% 55% 45% 48%',
+    '48% 52% 42% 58% / 58% 42% 58% 42%',
+    '62% 38% 50% 50% / 42% 58% 42% 58%',
+    '55% 45% 60% 40% / 48% 52% 40% 60%',
+    '42% 58% 45% 55% / 58% 42% 55% 45%',
+    '60% 40% 52% 48% / 45% 55% 48% 52%',
+     me = '48% 52% 40% 60% / 60% 40% 52% 48%',
+    '58% 42% 62% 38% / 42% 58% 38% 62%',
+    '40% 60% 55% 45% / 58% 42% 45% 55%',
+    '62% 38% 42% 58% / 40% 60% 58% 42%',
+    '52% 48% 60% 40% / 55% 45% 40% 60%',
+    '45% 55% 48% 52% / 62% 38% 52% 48%',
+    '58% 42% 40% 60% / 42% 58% 60% 40%',
+     me = '42% 58% 58% 42% / 52% 48% 42% 58%',
+    '60% 40% 50% 50% / 40% 60% 50% 50%',
+    '45% 55% 62% 38% / 58% 42% 38% 62%',
+    '58% 42% 42% 58% / 45% 55% 58% 42%',
+    '42% 58% 60% 40% / 60% 40% 40% 60%',
+    '52% 48% 45% 55% / 48% 52% 55% 45%',
+    '60% 40% 55% 45% / 45% 55% 45% 55%'
+  ];
+
   // 1. Fetch Weather & Handle Interactions
   async function fetchWeather() {
     try {
@@ -49,12 +73,11 @@ document.addEventListener('DOMContentLoaded', () => {
       
       weatherBubble.classList.add('pop-in');
 
-      // NEW: Randomize Cloud Shape on Click
+      // Randomize Weather Cloud Shape on Click using soft rounded pool
+      let currentShapeIdx = 0;
       weatherBlob.addEventListener('click', () => {
-        // Generates a random percentage between 35% and 75% for organic curvature
-        const r = () => Math.floor(Math.random() * 41) + 35;
-        // Applies a complex border-radius to morph the shape
-        weatherBlob.style.borderRadius = `${r()}% ${r()}% ${r()}% ${r()}% / ${r()}% ${r()}% ${r()}% ${r()}%`;
+        currentShapeIdx = (currentShapeIdx + Math.floor(Math.random() * 19) + 1) % organicShapesPool.length;
+        weatherBlob.style.borderRadius = organicShapesPool[currentShapeIdx];
       });
 
     } catch (error) {
