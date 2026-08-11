@@ -32,32 +32,34 @@ document.addEventListener('DOMContentLoaded', () => {
     '52% 48% 45% 55% / 48% 52% 55% 45%', '60% 40% 55% 45% / 45% 55% 45% 55%'
   ];
 
+  const sassyPhrases = [
+    "Stop Hitting Me 😠", "Seriously?! 😒😒😒", "Youuu Need to Stoooop punching me 😤😤",
+    "I can punch back 👊🏻👊🏻👊🏻", "Please let me sleep in peace 🥹🥹", "Shushshsshh 🤫🫩",
+    "Lol that's the best you got? 😂😂", "Someone is being naughty 🙄🙄",
+    "My granny can hit better 😆", "Seriously, take a chill pill sis!"
+  ];
+
   // =========================================
   // 1. 12-PHASE BRUSSELS TIME-SYNCED SKY
   // =========================================
   function updateBrusselsTheme() {
     try {
       const now = new Date();
-      // Calculate current hour in Brussels (Europe/Brussels)
       const brusselsHourStr = now.toLocaleString("en-US", { timeZone: "Europe/Brussels", hour: 'numeric', hour12: false });
       let hour = parseInt(brusselsHourStr, 10);
-      
-      if (hour >= 24) hour = 0; // Standardize midnight format
+      if (hour >= 24) hour = 0; 
 
-      // Strip previous theme classes
       document.body.className = document.body.className.replace(/\btheme-\d+-\d+\b/g, '').trim();
 
-      // Calculate the 2-hour window block (e.g. 15 becomes 14, making it theme-14-16)
       const startHour = Math.floor(hour / 2) * 2;
       const endHour = startHour + 2;
-      
       document.body.classList.add(`theme-${startHour}-${endHour}`);
     } catch (e) {
-      document.body.classList.add('theme-12-14'); // Safe daytime fallback
+      document.body.classList.add('theme-12-14'); 
     }
   }
   updateBrusselsTheme();
-  setInterval(updateBrusselsTheme, 60000); // Re-check time every 60s
+  setInterval(updateBrusselsTheme, 60000);
 
   // =========================================
   // 2. CANVAS AMBIENT PARTICLES & SPARKLE PHYSICS
@@ -70,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', resizeCanvas);
   resizeCanvas();
 
-  // Create persistent ambient particles (Pollen / Fireflies)
   for (let i = 0; i < 40; i++) {
     particles.push({
       x: Math.random() * window.innerWidth,
@@ -83,18 +84,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function createSparkleBurst(originX, originY, color) {
-    for (let i = 0; i < 16; i++) {
+  // Updated to support random colors & dynamic quantity for V 1.8
+  function createSparkleBurst(originX, originY, color, count = 16, randomColor = false) {
+    for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
-      // Increased distance range (2x) by raising the particle speeds
-      const speed = Math.random() * 8 + 3.0; 
+      const speed = Math.random() * 8 + 3.0;
+      
+      let pColor = color;
+      if (randomColor) {
+        const randomPalette = colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
+        pColor = randomPalette[Math.floor(Math.random() * randomPalette.length)];
+      }
+
       particles.push({
         x: originX,
         y: originY,
         radius: Math.random() * 3 + 1.5,
-        color: color,
+        color: pColor,
         vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - 2, // Stronger upward pop vector
+        vy: Math.sin(angle) * speed - 2, 
         life: 1.0,
         decay: Math.random() * 0.02 + 0.015,
         isBurst: true
@@ -125,7 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (p.life <= 0) particles.splice(i, 1);
       } else {
-        // Floating ambient particles
         p.x += p.vx;
         p.y += p.vy;
 
@@ -147,21 +154,34 @@ document.addEventListener('DOMContentLoaded', () => {
   renderParticles();
 
   // =========================================
-  // 3. FETCH WEATHER
+  // 3. FETCH WEATHER & BUBBLE LOGIC
   // =========================================
+  let weatherClickCount = 0;
+  let weatherLastClickTime = 0;
+  let angryBubbleActive = false;
+
   async function fetchWeather() {
     try {
-      const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=50.83&longitude=4.39&current=temperature_2m,apparent_temperature,weather_code&timezone=Europe%2FBrussels');
+      // V1.8 Added is_day parameter to accurately track sunset/sunrise
+      const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=50.83&longitude=4.39&current=temperature_2m,apparent_temperature,weather_code,is_day&timezone=Europe%2FBrussels');
       const data = await response.json();
       
       const temp = Math.round(data.current.temperature_2m);
       const feelsLike = Math.round(data.current.apparent_temperature);
       const code = data.current.weather_code;
+      const isDay = data.current.is_day; // 1 for Day, 0 for Night
       
       let condition = ""; let recommendation = ""; let icon = "";
 
-      if (code === 0) { condition = "Sunny"; icon = "☀️"; recommendation = "Apply sunscreen and stay hydrated Madame!"; } 
-      else if (code >= 1 && code <= 3) { condition = "Partly Cloudy"; icon = "⛅"; recommendation = "Great weather for Organ Trafficking!"; } 
+      // V1.8 Day vs Night logic
+      if (code === 0) { 
+        if (isDay) {
+          condition = "Sunny"; icon = "☀️"; recommendation = "Apply sunscreen and stay hydrated Madame!"; 
+        } else {
+          condition = "Clear Sky"; icon = "🌙"; recommendation = "The moon looks beautiful tonight!";
+        }
+      } 
+      else if (code >= 1 && code <= 3) { condition = "Partly Cloudy"; icon = isDay ? "⛅" : "☁️"; recommendation = "Great weather for Organ Trafficking!"; } 
       else if (code === 45 || code === 48) { condition = "Foggy"; icon = "🌫️"; recommendation = "I dunno what to do in Foggy weather Lol"; } 
       else if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) { condition = "Raining"; icon = "🌧️"; recommendation = "Don't forget your umbrella Madame Ji!"; } 
       else if ((code >= 71 && code <= 77) || code === 85 || code === 86) { condition = "Snowing"; icon = "❄️"; recommendation = "Drink a cup of Belgian Hot Chocolate!"; } 
@@ -169,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
       else { condition = "Unknown"; icon = "🌡️"; recommendation = "Weather pinik e ase.. Chill mere ghumao!"; }
 
       const weatherBubble = document.getElementById('weather-bubble');
+      const weatherFloat = document.getElementById('weather-float');
       const weatherBlob = document.getElementById('weather-blob');
       const weatherContent = document.getElementById('weather-content');
       
@@ -181,9 +202,51 @@ document.addEventListener('DOMContentLoaded', () => {
       weatherBubble.classList.add('pop-in');
 
       let currentShapeIdx = 0;
-      weatherBlob.addEventListener('click', () => {
+      
+      // Multi-click logic and morphing
+      weatherBlob.addEventListener('click', (e) => {
+        // Morph shape
         currentShapeIdx = (currentShapeIdx + Math.floor(Math.random() * 19) + 1) % organicShapesPool.length;
         weatherBlob.style.borderRadius = organicShapesPool[currentShapeIdx];
+
+        // 3X Particle Burst with Randomized colors (V 1.8)
+        const rect = weatherBlob.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        createSparkleBurst(centerX, centerY, null, 48, true);
+
+        // Angry Bubble 3-Click Logic (V 1.8)
+        const now = Date.now();
+        // If clicks are more than 800ms apart, reset the counter
+        if (now - weatherLastClickTime > 800) {
+          weatherClickCount = 0;
+        }
+        weatherClickCount++;
+        weatherLastClickTime = now;
+
+        if (weatherClickCount >= 3 && !angryBubbleActive) {
+          angryBubbleActive = true;
+          weatherClickCount = 0; // Reset
+
+          const angryBubble = document.createElement('div');
+          angryBubble.className = 'angry-bubble pop-in';
+          angryBubble.innerText = sassyPhrases[Math.floor(Math.random() * sassyPhrases.length)];
+          
+          // Append to float so it bobs up and down with the weather
+          weatherFloat.appendChild(angryBubble);
+
+          // Disappear after 5 seconds
+          setTimeout(() => {
+            angryBubble.style.opacity = '0';
+            angryBubble.style.transform = 'scale(0)';
+            
+            // Wait for fade-out animation to finish before removing from DOM
+            setTimeout(() => {
+              angryBubble.remove();
+              angryBubbleActive = false; // Reset function
+            }, 500); 
+          }, 5000);
+        }
       });
 
     } catch (error) {
@@ -245,22 +308,18 @@ document.addEventListener('DOMContentLoaded', () => {
     petalsWrapper.addEventListener('click', (e) => {
       e.stopPropagation();
       
-      // Trigger Spring Recoil
       swayWrapper.classList.remove('boing');
-      void swayWrapper.offsetWidth; // Force Reflow
+      void swayWrapper.offsetWidth; 
       swayWrapper.classList.add('boing');
 
-      // Sparkle Particle Burst
+      // 1X Particle Burst, Matched color
       const rect = petalsWrapper.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      createSparkleBurst(centerX, centerY, colors[0]);
+      createSparkleBurst(centerX, centerY, colors[0], 16, false);
 
-      // Floating Color-Matched Heart
       const popText = document.createElement('div');
       popText.classList.add('flower-pop-text');
-      
-      // Using the unicode text heart so we can natively colorize it using CSS
       popText.innerText = '♥'; 
       popText.style.color = colors[0];
       popText.style.textShadow = `0 0 15px ${colors[0]}, 0 0 5px #fff`; 
@@ -270,7 +329,6 @@ document.addEventListener('DOMContentLoaded', () => {
       
       document.body.appendChild(popText);
 
-      // Heart takes 4 seconds to reach the top of the screen before being removed
       setTimeout(() => popText.remove(), 4000); 
     });
 
