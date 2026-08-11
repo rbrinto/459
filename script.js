@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   let flowerCount = 0;
   // Tweaked: Increased total limit
-  const MAX_FLOWERS = 90; 
+  const MAX_FLOWERS = 40; 
   
   // Neon Color Palettes
   const colorPalettes = [
