@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     "Stop kicking me 🛌", "Let me sleep in peace!!!! 😴",
     "SHUUUSSHHHHHHHHHHHH. 🤫", "Pillow thief alert! Hands up! 🚨",
     "Keep your scalpel away from me! 🔪", "My kidneys are not for sale. 🛑",
-    "Black market business is booming today. 💼", "Hands off my vital organs, please! 🚫",
+    "The moon looks beautiful tonight 🌙❤️", "Hands off my vital organs, please! 🚫",
     "Can't touch my kidneys please.. Cause I need to buy an iPhone 💰",
     "Call the chill Police! 🚨", "Print more Euros in Belgium fast! 💶",
     "Go fund my luxury dinner tonight. 🍽️", "Belgium mint working overtime for us. 🏦",
