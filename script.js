@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   let flowerCount = 0;
   // Tweaked: Increased total limit
-  const MAX_FLOWERS = 70; 
+  const MAX_FLOWERS = 100; 
   
   // Neon Color Palettes
   const colorPalettes = [
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const stem = document.createElement('div');
     stem.classList.add('stem');
     
-    const stemHeight = Math.floor(Math.random() * 250) + 125;
+    const stemHeight = Math.floor(Math.random() * 260) + 130;
     stem.style.setProperty('--stem-height', stemHeight + 'px');
 
     swayWrapper.appendChild(petalsWrapper);
