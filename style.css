@@ -11,7 +11,7 @@ body, html {
 }
 
 /* =========================================
-   12-PHASE BRUSSELS TIME-SYNCED SKY THEMES
+   12-PHASE BRUSSES TIME-SYNCED SKY THEMES
 ========================================= */
 body[class*="theme-"] { animation: gradientBG 20s ease infinite; }
 body.theme-0-2 { background: linear-gradient(135deg, #050510, #0a0a2a, #0d0d2b, #111135); } 
@@ -136,20 +136,19 @@ body.theme-22-24 { background: linear-gradient(135deg, #4b1d52, #1a0b2e, #090a0f
 .weather-rec { font-size: 1.1em; border-top: 2px dashed rgba(255, 255, 255, 0.3); padding-top: 10px; margin-top: 5px; }
 
 /* =========================================
-   ANGRY SASSY BUBBLE (V 1.8.1 FIXED)
+   ANGRY SASSY BUBBLE
 ========================================= */
 .angry-bubble {
   position: absolute;
   top: 15%;
-  left: calc(100% + 3vw); /* Exactly 3% distance away from weather bubble */
+  left: calc(100% + 3vw);
   width: 220px;
   
-  /* Exact same characteristics, glass effect, and colors as the weather bubble */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.35);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.1);
-  background: rgba(230, 81, 0, 0.25); /* Sassy warm amber tint */
+  background: rgba(230, 81, 0, 0.25);
   
   border-radius: 45% 55% 58% 42% / 55% 45% 42% 58%;
   padding: 25px 30px;
