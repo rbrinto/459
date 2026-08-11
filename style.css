@@ -72,7 +72,7 @@ body.theme-22-24 { background: linear-gradient(135deg, #4b1d52, #1a0b2e, #090a0f
 }
 
 #weather-float {
-  position: relative; /* Allows the angry bubble to position relative to this floating anchor */
+  position: relative; 
   animation: wanderCloud 18s ease-in-out infinite;
 }
 
@@ -136,28 +136,43 @@ body.theme-22-24 { background: linear-gradient(135deg, #4b1d52, #1a0b2e, #090a0f
 .weather-rec { font-size: 1.1em; border-top: 2px dashed rgba(255, 255, 255, 0.3); padding-top: 10px; margin-top: 5px; }
 
 /* =========================================
-   ANGRY BUBBLE (V 1.8)
+   ANGRY SASSY BUBBLE (V 1.8.1 FIXED)
 ========================================= */
 .angry-bubble {
   position: absolute;
-  top: -20px;
-  left: 95%; /* Places it just to the right of the weather blob */
-  width: 140px;
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-  border-radius: 20px 20px 20px 0px; /* Gives it a speech bubble tail pointing left */
-  padding: 15px 18px;
-  color: white;
-  font-family: 'Patrick Hand', cursive;
-  font-size: 1.15em;
+  top: 15%;
+  left: calc(100% + 3vw); /* Exactly 3% distance away from weather bubble */
+  width: 220px;
+  
+  /* Exact same characteristics, glass effect, and colors as the weather bubble */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.1);
+  background: rgba(230, 81, 0, 0.25); /* Sassy warm amber tint */
+  
+  border-radius: 45% 55% 58% 42% / 55% 45% 42% 58%;
+  padding: 25px 30px;
+  
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  font-family: 'Patrick Hand', 'Comic Sans MS', cursive;
+  font-size: 1.35em;
   text-align: center;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-  pointer-events: none; /* Ignore clicks so it doesn't interrupt other things */
-  z-index: 10;
-  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  user-select: none;
+  
+  pointer-events: none;
+  z-index: 1001;
+  
+  opacity: 0;
+  transform: scale(0);
+  transform-origin: left center;
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), border-radius 0.6s ease;
+}
+
+.angry-bubble.show {
+  opacity: 1;
+  transform: scale(1);
 }
 
 /* =========================================
