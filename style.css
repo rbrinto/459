@@ -24,116 +24,119 @@ body, html {
   z-index: 10;
 }
 
-/* Base Flower Container */
-.flower {
-  position: absolute;
-  transform: translateX(-50%);
-  transform-origin: bottom center; /* Essential so scaling happens from the ground up */
-  pointer-events: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end; 
-}
-
-/* The Stem - Now with a springy bounce */
-.stem {
-  width: 6px;
-  height: 0; 
-  background: linear-gradient(to top, #2d7a32, #5eea65);
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(94, 234, 101, 0.5);
-  /* The cubic-bezier creates the spring-like growth overshoot */
-  animation: growStem 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-@keyframes growStem {
-  to { height: var(--stem-height); }
-}
-
-/* The Petals Wrapper */
-.petals-wrapper {
-  position: relative;
-  width: 0;
-  height: 0;
-  transform: scale(0);
-  /* Matched the bloom to have a similar bouncy spring */
-  animation: bloom 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  animation-delay: 0.8s; 
-}
-
-@keyframes bloom {
-  to { transform: scale(1); }
-}
-
-/* Gentle wind swaying effect - Now with Skew for a bending/flexing effect */
-.sway {
-  transform-origin: bottom center;
-  animation: swayAnim var(--sway-duration, 4s) ease-in-out infinite alternate;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Combines a random base tilt with a skew that forces the stem to flex */
-@keyframes swayAnim {
-  0% { transform: rotate(calc(var(--base-rot, 0deg) - 10deg)) skewX(4deg); }
-  100% { transform: rotate(calc(var(--base-rot, 0deg) + 10deg)) skewX(-4deg); }
-}
-
 /* =========================================
-   GRASS STYLES
+   WEATHER BUBBLE (V 1.7 - Glassy Wandering Cloud)
 ========================================= */
-#grass-container {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  pointer-events: none;
-  z-index: 20; 
+#weather-bubble {
+  position: fixed;
+  /* Positioned lower and further right */
+  top: 8%;
+  left: 12%;
+  z-index: 1000;
+  transform: scale(0); 
+  transform-origin: center center;
 }
 
-.grass-blade {
-  position: absolute;
-  bottom: 0;
-  width: 6px;
-  height: var(--grass-height);
-  background: linear-gradient(to top, #0a260a, #2d7a32);
-  transform-origin: bottom center;
-  border-top-left-radius: 100%;
-  border-top-right-radius: 10%;
-  animation: grassSway var(--sway-time) ease-in-out infinite alternate;
+/* Pop-in animation */
+.pop-in {
+  animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Slower, random wandering animation (18 seconds) */
+#weather-float {
+  animation: wanderCloud 18s ease-in-out infinite;
+}
+
+@keyframes wanderCloud {
+  0%   { transform: translate(0px, 0px); }
+  20%  { transform: translate(15px, -10px); }
+  40%  { transform: translate(-10px, 15px); }
+  60%  { transform: translate(-20px, -5px); }
+  80%  { transform: translate(10px, 10px); }
+  100% { transform: translate(0px, 0px); }
+}
+
+/* The Glass Cloud / Blob */
+#weather-blob {
+  /* Glassmorphism restored and tuned for a cloud look */
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.1);
+  
+  /* Default organic cloud shape */
+  border-radius: 65% 45% 55% 40% / 50% 55% 45% 60%;
+  padding: 40px 50px;
+  
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Keeps text readable on glass */
+  font-family: 'Patrick Hand', 'Comic Sans MS', cursive;
+  text-align: center;
+  cursor: pointer;
+  user-select: none; 
+  
+  /* Transitions: scale (punch) is fast, border-radius (morphing) is smooth */
+  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1), 
+              border-radius 0.6s ease-in-out,
+              box-shadow 0.1s ease;
+}
+
+/* The "Punch" Effect on Click */
+#weather-blob:active {
+  transform: scale(0.85);
+  box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.15), inset 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+/* Text Formatting */
+.weather-header {
+  font-size: 1.8em;
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.weather-header span {
+  font-size: 0.6em;
   opacity: 0.9;
 }
 
-@keyframes grassSway {
-  0% { transform: rotate(-10deg); }
-  100% { transform: rotate(15deg); }
+.weather-desc {
+  font-size: 1.2em;
+  margin-bottom: 8px;
+  color: #f0f0f0;
+}
+
+.weather-rec {
+  font-size: 1.1em;
+  border-top: 2px dashed rgba(255, 255, 255, 0.3);
+  padding-top: 10px;
+  margin-top: 5px;
 }
 
 /* =========================================
-   FLOWER SHAPES & GEOMETRY
+   FLOWER & GRASS STYLES (Unchanged)
 ========================================= */
-.petal {
-  position: absolute;
-  background: radial-gradient(circle at bottom, var(--color1), var(--color2));
-  box-shadow: 0 0 20px var(--color1);
-  transform-origin: bottom center;
-}
-
-.center {
-  position: absolute;
-  width: 26px;
-  height: 26px;
-  background: radial-gradient(circle, #fff700, #ff8c00);
-  border-radius: 50%;
-  top: -13px;
-  left: -13px;
-  z-index: 10;
-  box-shadow: 0 0 25px #ffcc00;
-}
-
+.flower { position: absolute; transform: translateX(-50%); transform-origin: bottom center; pointer-events: none; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+.stem { width: 6px; height: 0; background: linear-gradient(to top, #2d7a32, #5eea65); border-radius: 5px; box-shadow: 0 0 10px rgba(94, 234, 101, 0.5); animation: growStem 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+@keyframes growStem { to { height: var(--stem-height); } }
+.petals-wrapper { position: relative; width: 0; height: 0; transform: scale(0); animation: bloom 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; animation-delay: 0.8s; }
+@keyframes bloom { to { transform: scale(1); } }
+.sway { transform-origin: bottom center; animation: swayAnim var(--sway-duration, 4s) ease-in-out infinite alternate; display: flex; flex-direction: column; align-items: center; }
+@keyframes swayAnim { 0% { transform: rotate(calc(var(--base-rot, 0deg) - 10deg)) skewX(4deg); } 100% { transform: rotate(calc(var(--base-rot, 0deg) + 10deg)) skewX(-4deg); } }
+#grass-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 100px; pointer-events: none; z-index: 20; }
+.grass-blade { position: absolute; bottom: 0; width: 6px; height: var(--grass-height); background: linear-gradient(to top, #0a260a, #2d7a32); transform-origin: bottom center; border-top-left-radius: 100%; border-top-right-radius: 10%; animation: grassSway var(--sway-time) ease-in-out infinite alternate; opacity: 0.9; }
+@keyframes grassSway { 0% { transform: rotate(-10deg); } 100% { transform: rotate(15deg); } }
+.petal { position: absolute; background: radial-gradient(circle at bottom, var(--color1), var(--color2)); box-shadow: 0 0 20px var(--color1); transform-origin: bottom center; }
+.center { position: absolute; width: 26px; height: 26px; background: radial-gradient(circle, #fff700, #ff8c00); border-radius: 50%; top: -13px; left: -13px; z-index: 10; box-shadow: 0 0 25px #ffcc00; }
 .shape-daisy .petal { width: 30px; height: 80px; border-radius: 50% 50% 20% 20%; top: -80px; left: -15px; }
 .shape-lotus .petal { width: 36px; height: 85px; border-radius: 50% 50% 10% 10% / 100% 100% 10% 10%; top: -85px; left: -18px; }
 .shape-star .petal { width: 14px; height: 95px; border-radius: 50% 50% 10% 10% / 100% 100% 10% 10%; top: -95px; left: -7px; }
