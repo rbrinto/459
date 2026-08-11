@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const stem = document.createElement('div');
     stem.classList.add('stem');
     
-    const stemHeight = Math.floor(Math.random() * 200) + 100;
+    const stemHeight = Math.floor(Math.random() * 250) + 125;
     stem.style.setProperty('--stem-height', stemHeight + 'px');
 
     swayWrapper.appendChild(petalsWrapper);
