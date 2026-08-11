@@ -13,13 +13,27 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Weather Bubble (V 1.6 - Organic & Interactive) -->
+  <!-- Weather Bubble (V 1.6) -->
   <div id="weather-bubble">
     <div id="weather-float">
-      <!-- The new blob container that takes the punch effect -->
       <div id="weather-blob">
         <div id="weather-content">Loading weather...</div>
       </div>
+    </div>
+  </div>
+
+  <!-- Google Search Bubble (V 1.6 - 1.5x Larger & Soft Rounded) -->
+  <div id="search-bubble">
+    <div id="search-blob">
+      <div class="google-logo">
+        <span style="color: #4285F4;">G</span><span style="color: #EA4335;">o</span><span style="color: #FBBC05;">o</span><span style="color: #4285F4;">g</span><span style="color: #34A853;">l</span><span style="color: #EA4335;">e</span>
+      </div>
+      <form id="search-form" action="https://www.google.com/search" method="GET" target="_blank">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" name="q" placeholder="Search Google or type a URL" autocomplete="off" required>
+        </div>
+      </form>
     </div>
   </div>
 
