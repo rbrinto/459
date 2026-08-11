@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const ctx = canvas.getContext('2d');
   
   let flowerCount = 0;
-  const MAX_FLOWERS = 50; 
+  const MAX_FLOWERS = 70; 
   
   const colorPalettes = [
     ['#ff0080', '#ff8c00'], ['#00f2fe', '#4facfe'], ['#f83600', '#f9d423'], 
