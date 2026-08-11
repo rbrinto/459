@@ -11,7 +11,6 @@ body, html {
   animation: gradientBG 15s ease infinite;
 }
 
-
 @keyframes gradientBG {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -26,11 +25,10 @@ body, html {
 }
 
 /* =========================================
-   WEATHER BUBBLE (V 1.7 - Glassy Wandering Cloud)
+   WEATHER BUBBLE (V 1.6 - Slow Soft Punch)
 ========================================= */
 #weather-bubble {
   position: fixed;
-  /* Positioned lower and further right */
   top: 8%;
   left: 7%;
   z-index: 1000;
@@ -38,7 +36,6 @@ body, html {
   transform-origin: center center;
 }
 
-/* Pop-in animation */
 .pop-in {
   animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
@@ -48,7 +45,6 @@ body, html {
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* Slower, random wandering animation (18 seconds) */
 #weather-float {
   animation: wanderCloud 18s ease-in-out infinite;
 }
@@ -62,39 +58,45 @@ body, html {
   100% { transform: translate(0px, 0px); }
 }
 
-/* The Glass Cloud / Blob */
+/* Glass Cloud with Very Low Intensity Color-Shift Animation */
 #weather-blob {
-  /* Glassmorphism restored and tuned for a cloud look */
-  background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.1);
   
-  /* Default organic cloud shape */
-  border-radius: 65% 45% 55% 40% / 50% 55% 45% 60%;
-  padding: 40px 50px;
+  border-radius: 58% 42% 55% 45% / 52% 55% 45% 48%;
+  padding: 35px 45px;
   
   color: #ffffff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Keeps text readable on glass */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   font-family: 'Patrick Hand', 'Comic Sans MS', cursive;
   text-align: center;
   cursor: pointer;
   user-select: none; 
   
-  /* Transitions: scale (punch) is fast, border-radius (morphing) is smooth */
-  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1), 
-              border-radius 0.6s ease-in-out,
-              box-shadow 0.1s ease;
+  animation: weatherColorShift 24s ease infinite;
+
+  /* Extra slow and super soft punch reaction */
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-radius 0.8s ease-in-out,
+              box-shadow 0.8s ease;
 }
 
-/* The "Punch" Effect on Click */
+@keyframes weatherColorShift {
+  0%   { background: rgba(255, 255, 255, 0.12); }
+  25%  { background: rgba(186, 104, 200, 0.16); }
+  50%  { background: rgba(77, 208, 225, 0.16); }
+  75%  { background: rgba(255, 183, 77, 0.16); }
+  100% { background: rgba(255, 255, 255, 0.12); }
+}
+
+/* Very Subtle and Slow Punching Effect */
 #weather-blob:active {
-  transform: scale(0.85);
-  box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.15), inset 0 0 10px rgba(255, 255, 255, 0.05);
+  transform: scale(0.96);
+  box-shadow: 1px 4px 15px rgba(0, 0, 0, 0.15), inset 0 0 10px rgba(255, 255, 255, 0.05);
 }
 
-/* Text Formatting */
 .weather-header {
   font-size: 1.8em;
   font-weight: 600;
@@ -124,7 +126,117 @@ body, html {
 }
 
 /* =========================================
-   FLOWER & GRASS STYLES (Unchanged)
+   GOOGLE SEARCH BUBBLE (1.5x Larger & Smooth)
+========================================= */
+#search-bubble {
+  position: fixed;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 500;
+  pointer-events: auto;
+}
+
+#search-blob {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), inset 0 0 25px rgba(255, 255, 255, 0.12);
+  
+  /* Scaled up 1.5x in size */
+  padding: 60px 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  /* 5x slower animation duration (110s) with soft round shapes */
+  animation: fluidMorphSearch 110s ease-in-out infinite alternate;
+  
+  /* No scale/punch effect on active click */
+  transition: border-radius 2s ease-in-out, box-shadow 0.3s ease;
+}
+
+/* 20 Soft, Round Organic States (no sharp corners) */
+@keyframes fluidMorphSearch {
+  0%   { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; }
+  5%   { border-radius: 58% 42% 55% 45% / 45% 55% 42% 58%; }
+  10%  { border-radius: 42% 58% 45% 55% / 58% 42% 55% 45%; }
+  15%  { border-radius: 62% 38% 48% 52% / 38% 62% 58% 42%; }
+  20%  { border-radius: 45% 55% 60% 40% / 55% 45% 40% 60%; }
+  25%  { border-radius: 55% 45% 40% 60% / 48% 52% 60% 40%; }
+  30%  { border-radius: 40% 60% 52% 48% / 60% 40% 45% 55%; }
+  35%  { border-radius: 62% 38% 42% 58% / 38% 62% 58% 42%; }
+  40%  { border-radius: 48% 52% 60% 40% / 58% 42% 40% 60%; }
+  45%  { border-radius: 58% 42% 40% 60% / 42% 58% 60% 40%; }
+  50%  { border-radius: 45% 55% 58% 42% / 60% 40% 42% 58%; }
+  55%  { border-radius: 60% 40% 55% 45% / 40% 60% 45% 55%; }
+  60%  { border-radius: 38% 62% 45% 55% / 62% 38% 55% 45%; }
+  65%  { border-radius: 58% 42% 40% 60% / 45% 55% 60% 40%; }
+  70%  { border-radius: 48% 52% 58% 42% / 55% 45% 42% 58%; }
+  75%  { border-radius: 62% 38% 45% 55% / 38% 62% 55% 45%; }
+  80%  { border-radius: 42% 58% 55% 45% / 58% 42% 48% 52%; }
+  85%  { border-radius: 55% 45% 62% 38% / 42% 58% 38% 62%; }
+  90%  { border-radius: 45% 55% 40% 60% / 60% 40% 60% 40%; }
+  95%  { border-radius: 58% 42% 50% 50% / 50% 50% 42% 58%; }
+  100% { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; }
+}
+
+.google-logo {
+  font-size: 4.8em;
+  font-weight: 700;
+  font-family: 'Product Sans', 'Segoe UI', sans-serif;
+  letter-spacing: -1.5px;
+  margin-bottom: 24px;
+  user-select: none;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+#search-form {
+  width: 100%;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 40px;
+  padding: 15px 30px;
+  width: 480px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-box:focus-within {
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), 0 0 12px rgba(255, 255, 255, 0.5);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.search-icon {
+  font-size: 1.4em;
+  margin-right: 16px;
+  opacity: 0.85;
+}
+
+.search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  color: #ffffff;
+  font-size: 1.4em;
+  font-family: 'Patrick Hand', 'Segoe UI', sans-serif;
+  width: 100%;
+}
+
+.search-box input::placeholder {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* =========================================
+   FLOWER & GRASS STYLES
 ========================================= */
 .flower { position: absolute; transform: translateX(-50%); transform-origin: bottom center; pointer-events: none; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
 .stem { width: 6px; height: 0; background: linear-gradient(to top, #2d7a32, #5eea65); border-radius: 5px; box-shadow: 0 0 10px rgba(94, 234, 101, 0.5); animation: growStem 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
