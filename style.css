@@ -31,7 +31,7 @@ body, html {
   position: fixed;
   /* Positioned lower and further right */
   top: 8%;
-  left: 12%;
+  left: 7%;
   z-index: 1000;
   transform: scale(0); 
   transform-origin: center center;
