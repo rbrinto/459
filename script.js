@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const weatherContent = document.getElementById('weather-content');
       
       weatherContent.innerHTML = `
-        <div class="weather-header">${icon} ${temp}°C <br><span>in Etterbeek</span></div>
+        <div class="weather-header">${icon} ${temp}°C <br><span>in Brussels</span></div>
         <div class="weather-desc">Feels like ${feelsLike}°C • ${condition}</div>
         <div class="weather-rec">${recommendation}</div>
       `;
