@@ -178,7 +178,7 @@ body.theme-22-24 { background: linear-gradient(135deg, #4b1d52, #1a0b2e, #090a0f
    GOOGLE SEARCH BUBBLE
 ========================================= */
 #search-bubble { position: fixed; top: 38%; left: 50%; transform: translate(-50%, -50%); z-index: 500; pointer-events: auto; }
-#search-blob { background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.35); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), inset 0 0 25px rgba(255, 255, 255, 0.12); padding: 60px 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: fluidMorphSearch 110s ease-in-out infinite alternate; transition: border-radius 2s ease-in-out, box-shadow 0.3s ease; }
+#search-blob { background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.35); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), inset 0 0 25px rgba(255, 255, 255, 0.12); padding: 60px 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: fluidMorphSearch 50s ease-in-out infinite alternate; transition: border-radius 2s ease-in-out, box-shadow 0.3s ease; }
 
 @keyframes fluidMorphSearch {
   0%   { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; }
