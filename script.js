@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     "Time to print some more cash. 🖨️", "Fund my expensive restaurant habits today! 💸",
     "Your ATM card is calling me. 💳", "Send money straight from Brussels now. 🇧🇪",
     "Pay up for my fancy dinner. 🥂", "You are looking extra chaotic today. 🌪️",
-    "Somebody woke up and chose violence. 🥷", "Absolutely zero chill detected here. 🧊",
+    "Somebody woke up and chose violence. 🥷", "I Love You 🌙❤️",
     "You talk way too much science fiction. 🗣️", "Simmer down, little miss dramatic. 🎭",
     "Who gave you permission to punch me?", "Cute outfit, terrible attitude today. 👗",
     "You love drama way too much. 🍿", "Main character syndrome is acting up. 🎬",
