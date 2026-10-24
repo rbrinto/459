@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     "Time to print some more cash. 🖨️", "Fund my expensive restaurant habits today! 💸",
     "Your ATM card is calling me. 💳", "Send money straight from Brussels now. 🇧🇪",
     "Pay up for my fancy dinner. 🥂", "You are looking extra chaotic today. 🌪️",
-    "Somebody woke up and chose violence. 🥷", "I Love You 🌙❤️",
+    "Somebody woke up and chose violence. 🥷", "Absolutely zero chill detected here. 🧊",
     "You talk way too much science fiction. 🗣️", "Simmer down, little miss dramatic. 🎭",
     "Who gave you permission to punch me?", "Cute outfit, terrible attitude today. 👗",
     "You love drama way too much. 🍿", "Main character syndrome is acting up. 🎬",
@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const j = Math.floor(Math.random() * (i + 1));
         [queue[i], queue[j]] = [queue[j], queue[i]];
       }
-      // Prevent back-to-back repetition across queue boundaries
       if (lastSassyText && queue[0] === lastSassyText && queue.length > 1) {
         [queue[0], queue[1]] = [queue[1], queue[0]];
       }
@@ -87,8 +86,59 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================
+  // CUSTOMIZATION FOLDER & FEATURE 1 TOGGLE
+  // =========================================
+  const folderToggleBtn = document.getElementById('folder-toggle-btn');
+  const appsFolderModal = document.getElementById('apps-folder-modal');
+  const folderCloseBtn = document.getElementById('folder-close-btn');
+
+  folderToggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    appsFolderModal.classList.toggle('show-folder');
+  });
+
+  folderCloseBtn.addEventListener('click', () => {
+    appsFolderModal.classList.remove('show-folder');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!appsFolderModal.contains(e.target) && !folderToggleBtn.contains(e.target)) {
+      appsFolderModal.classList.remove('show-folder');
+    }
+  });
+
+  // Feature Buttons Interactivity (Feature 1 to 12)
+  const featureButtons = document.querySelectorAll('.feature-app-btn');
+  featureButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const featureId = btn.getAttribute('data-feature');
+      
+      if (featureId === '1') {
+        // Feature 1: Change and choose a random color / gradient when clicked
+        const randomPalette1 = colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
+        const randomPalette2 = colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
+        const randomAngle = Math.floor(Math.random() * 360);
+        
+        document.body.style.animation = 'none';
+        document.body.style.background = `linear-gradient(${randomAngle}deg, ${randomPalette1[0]}, ${randomPalette2[1]}, ${randomPalette1[1]})`;
+        
+        // Visual feedback inside button
+        const originalText = btn.innerText;
+        btn.innerText = "Applied! ✨";
+        setTimeout(() => {
+          btn.innerText = originalText;
+        }, 1200);
+      } else {
+        // Placeholder for future features 2 to 12
+        alert(`Feature ${featureId} selected! (Coming soon)`);
+      }
+    });
+  });
+
+  // =========================================
   // 1. 12-PHASE BRUSSELS TIME-SYNCED SKY
   // =========================================
+  let isFeature1Active = false; // Note: Brussels updates skipped if manual Feature 1 override is desired, or let Brussels run normally unless overridden.
   function updateBrusselsTheme() {
     try {
       const now = new Date();
@@ -267,7 +317,6 @@ document.addEventListener('DOMContentLoaded', () => {
           angryBubbleActive = true;
           weatherClickCount = 0; 
 
-          // Fetch unique random sassy text from queue
           angryBubble.innerText = getUniqueSassyPhrase();
           
           const randomAngryShape = organicShapesPool[Math.floor(Math.random() * organicShapesPool.length)];
