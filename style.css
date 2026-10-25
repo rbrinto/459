@@ -86,13 +86,15 @@ body.theme-22-24 { background: linear-gradient(135deg, #4b1d52, #1a0b2e, #090a0f
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
-/* Apps Folder Modal (Android Style 3x4 Grid) */
+/* Apps Folder Modal (Extended 3x4 Grid + 3x3 Links) */
 #apps-folder-modal {
   position: absolute;
   top: 70px;
   right: 0;
-  width: 310px;
-  background: rgba(20, 20, 35, 0.75);
+  width: 320px;
+  max-height: 82vh;
+  overflow-y: auto;
+  background: rgba(20, 20, 35, 0.82);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -107,6 +109,15 @@ body.theme-22-24 { background: linear-gradient(135deg, #4b1d52, #1a0b2e, #090a0f
   z-index: 2001;
 }
 
+/* Custom scrollbar for modal */
+#apps-folder-modal::-webkit-scrollbar {
+  width: 6px;
+}
+#apps-folder-modal::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
 #apps-folder-modal.show-folder {
   opacity: 1;
   transform: scale(1) translateY(0);
@@ -117,7 +128,7 @@ body.theme-22-24 { background: linear-gradient(135deg, #4b1d52, #1a0b2e, #090a0f
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   color: #ffffff;
   font-family: 'Patrick Hand', cursive;
   font-size: 1.2em;
@@ -145,11 +156,12 @@ body.theme-22-24 { background: linear-gradient(135deg, #4b1d52, #1a0b2e, #090a0f
   opacity: 1;
 }
 
-/* 3 x 4 Android App Folder Grid */
+/* 3 x 4 Android App Feature Grid */
 .apps-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
 .feature-app-btn {
@@ -159,7 +171,7 @@ body.theme-22-24 { background: linear-gradient(135deg, #4b1d52, #1a0b2e, #090a0f
   color: #ffffff;
   font-family: 'Patrick Hand', cursive;
   font-size: 0.95em;
-  padding: 14px 4px;
+  padding: 12px 4px;
   text-align: center;
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
@@ -176,6 +188,69 @@ body.theme-22-24 { background: linear-gradient(135deg, #4b1d52, #1a0b2e, #090a0f
 
 .feature-app-btn:active {
   transform: translateY(0);
+}
+
+/* Divider & Section Title */
+.folder-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 14px 0 10px 0;
+}
+
+.folder-section-title {
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Patrick Hand', cursive;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+/* 3 x 3 Links Grid with Pill Shape */
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.link-app-btn {
+  background: rgba(114, 47, 55, 0.25); /* Burgundy-tinted pill */
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px; /* Distinct Pill Shape */
+  color: #ffffff;
+  text-decoration: none;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 0.82em;
+  padding: 8px 4px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  user-select: none;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.link-app-btn:hover {
+  background: rgba(114, 47, 55, 0.5);
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+}
+
+.link-app-btn:active {
+  transform: translateY(0);
+}
+
+.link-emoji {
+  font-size: 1.15em;
+}
+
+.link-app-btn.coming-soon {
+  opacity: 0.65;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* =========================================
