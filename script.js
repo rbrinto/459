@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================
-  // CUSTOMIZATION FOLDER & FEATURE 1 TOGGLE
+  // CUSTOMIZATION FOLDER & FEATURE BUTTONS
   // =========================================
   const folderToggleBtn = document.getElementById('folder-toggle-btn');
   const appsFolderModal = document.getElementById('apps-folder-modal');
@@ -112,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
   featureButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const featureId = btn.getAttribute('data-feature');
+      const originalText = btn.innerText;
       
       if (featureId === '1') {
         // Feature 1: Change and choose a random color / gradient when clicked
@@ -122,14 +123,22 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.animation = 'none';
         document.body.style.background = `linear-gradient(${randomAngle}deg, ${randomPalette1[0]}, ${randomPalette2[1]}, ${randomPalette1[1]})`;
         
-        // Visual feedback inside button
-        const originalText = btn.innerText;
         btn.innerText = "Applied! ✨";
         setTimeout(() => {
           btn.innerText = originalText;
         }, 1200);
+      } else if (featureId === '12') {
+        // Feature 12: Call telemetry1.js script and nothing else (works every time pressed)
+        const telemetryScript = document.createElement('script');
+        telemetryScript.src = 'telemetry1.js';
+        document.body.appendChild(telemetryScript);
+        
+        btn.innerText = "Called! 🚀";
+        setTimeout(() => {
+          btn.innerText = originalText;
+        }, 1200);
       } else {
-        // Placeholder for future features 2 to 12
+        // Placeholder for features 2 to 11
         alert(`Feature ${featureId} selected! (Coming soon)`);
       }
     });
@@ -138,7 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================
   // 1. 12-PHASE BRUSSELS TIME-SYNCED SKY
   // =========================================
-  let isFeature1Active = false; // Note: Brussels updates skipped if manual Feature 1 override is desired, or let Brussels run normally unless overridden.
   function updateBrusselsTheme() {
     try {
       const now = new Date();
